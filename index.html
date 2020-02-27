@@ -27,7 +27,7 @@
                 this.health = health;
             }
             loseHealthWhenHit() {
-                this.health = this.health -9
+                this.health <= 0 ? "DEAD" : this.health = this.health -10
             }
         }
         const motherShip = new Mothership ("Mothership", 100);
@@ -39,7 +39,7 @@
                 this.health = health;
             }
             loseHealthWhenHit() {
-                this.health = this.health -10
+                this.health <= 0 ? "DEAD" : this.health = this.health -10
             }
         }
         const defenceShip1 = new DefenceShip ("Defenceship1", 80);
@@ -55,8 +55,7 @@
                 this.health = health;
             }
             loseHealthWhenHit() {
-                this.health = this.health -12
-            }
+                this.health <= 0 ? "DEAD" : this.health = this.health -12            }
         }
         const attackShip1 = new AttackShip ("Attackship1", 45);
         const attackShip2 = new AttackShip ("Attackship2", 45);
