@@ -7,10 +7,15 @@
     <title>Document</title>
 </head>
 <body>
-    <h2 id="mothership"> </h2>
+    <p id="mothership"> </p>
     <section id= "defence-ships"></section>
     <section id = "attack-ships"></section>
     <button id = "attack" type="button" onclick="attackAndUpdate()">Attack!</button>
+    <style>
+        #defence-ships{
+            border: black 2px solid;
+        }
+    </style>
     <script>
         class Spaceship{
 
@@ -23,11 +28,10 @@
         class Mothership extends Spaceship {
             constructor(name, health) {
                 super (name, health)
-                this.name = name;
-                this.health = health;
             }
             loseHealthWhenHit() {
-                this.health <= 0 ? "DEAD" : this.health = this.health -10
+                // this.health <= 0 ? this.health = 0 : 
+                this.health = this.health -10;
             }
         }
         const motherShip = new Mothership ("Mothership", 100);
@@ -35,11 +39,10 @@
         class DefenceShip extends Spaceship {
             constructor(name, health) {
                 super (name, health)
-                this.name = name;
-                this.health = health;
             }
             loseHealthWhenHit() {
-                this.health <= 0 ? "DEAD" : this.health = this.health -10
+                // this.health <= 0 ? this.health = 0 : 
+                this.health = this.health -10;
             }
         }
         const defenceShip1 = new DefenceShip ("Defenceship1", 80);
@@ -51,11 +54,12 @@
         class AttackShip extends Spaceship{
             constructor(name, health) {
                 super (name, health)
-                this.name = name;
-                this.health = health;
             }
             loseHealthWhenHit() {
-                this.health <= 0 ? "DEAD" : this.health = this.health -12            }
+                // this.health <= 0 ? this.health = 0 : 
+                this.health = this.health -12 ;
+
+            }
         }
         const attackShip1 = new AttackShip ("Attackship1", 45);
         const attackShip2 = new AttackShip ("Attackship2", 45);
@@ -76,7 +80,7 @@
 
         const defenceShipPrint = () => {
             document.getElementById("defence-ships").innerHTML = '';
-            defenceShips.forEach(deffShips => document.getElementById("defence-ships").insertAdjacentHTML("afterbegin", deffShips.name + "</br>" + deffShips.health + "</br>" + "</br>"));
+            defenceShips.forEach(deffShips => document.getElementById("defence-ships").insertAdjacentHTML("afterbegin",`<p> ${deffShips.name} ${deffShips.health} </p>`));
         }
         defenceShipPrint();
 
@@ -88,24 +92,35 @@
         }
         attackShipPrint();
 
-        const shipsArray = [motherShip, defenceShip1,defenceShip2,defenceShip3,defenceShip4,defenceShip5,attackShip1,attackShip2,attackShip3,attackShip4,attackShip5,attackShip6,attackShip7,attackShip8];
-        const randomNum = () => {
-            return Math.ceil(Math.random() * 13)
-        }
+        let shipsArray = [motherShip, defenceShip1,defenceShip2,defenceShip3,defenceShip4,defenceShip5,attackShip1,attackShip2,attackShip3,attackShip4,attackShip5,attackShip6,attackShip7,attackShip8];
+        // const randomNum = () => {
+        //     return Math.floor(Math.random() * 14)
+        // }
 
         const attackAndUpdate = () => {
             attackRandomShip();
             updateShipsHealth();
         };
 
-        const attackRandomShip = () => shipsArray[randomNum()].loseHealthWhenHit();
+        const attackRandomShip = () => {
+            const randomNum = Math.floor(Math.random() * shipsArray.length);
+            const randomShip = shipsArray[randomNum];
+            randomShip.health <= 0 ? shipsArray.splice(randomNum, 1) : randomShip.loseHealthWhenHit();
+            shipsArray.length == 0 ? alert("Your game has finished, you have won!") : null;
+        } 
+        //    if (shipsArray[randomNum].health <= 0) {
+        //        return shipsArray[randomNum].splice([randomNum], 1);
+        //    }
+        //     };
 
         const updateShipsHealth = () => {
             motherShipPrint();
             defenceShipPrint();
             attackShipPrint();
         }
-
     </script>
 </body>
 </html>
+
+
+
