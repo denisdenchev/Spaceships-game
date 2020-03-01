@@ -70,6 +70,15 @@
         const attackShip7 = new AttackShip ("Attackship7", 45);
         const attackShip8 = new AttackShip ("Attackship8", 45);
 
+        // const arrayForAttShips = ""
+        // arrayForAttShips.push("attackShip1[i]")
+
+        // for (index =0; index < 8; index++) {
+        //     const attackShip = attackShip.map(attackShipArrays[i]);
+        //     return attackShip;
+        // }
+        // console.log(attackShip);
+
         const motherShipPrint = () => {
             document.getElementById("mothership").innerHTML = '';
             document.getElementById("mothership").insertAdjacentHTML("afterbegin", motherShip.name + "</br>" + motherShip.health + "</br>" + "</br>");
@@ -80,22 +89,19 @@
 
         const defenceShipPrint = () => {
             document.getElementById("defence-ships").innerHTML = '';
-            defenceShips.forEach(deffShips => document.getElementById("defence-ships").insertAdjacentHTML("afterbegin",`<p> ${deffShips.name} ${deffShips.health} </p>`));
+            defenceShips.forEach(deffShips => document.getElementById("defence-ships").insertAdjacentHTML("afterbegin",`<p class = "deffShips"> ${deffShips.name} </p> <p class = "deffShipsHP"> ${deffShips.health} </p>`));
         }
         defenceShipPrint();
 
         const attackShips = [attackShip1,attackShip2,attackShip3,attackShip4,attackShip5,attackShip6,attackShip7,attackShip8];
 
-        const attackShipPrint = () => {
+        const attackShipsPrint = () => {
             document.getElementById("attack-ships").innerHTML = "";
-            attackShips.forEach(attShips => document.getElementById("attack-ships").insertAdjacentHTML("afterbegin", attShips.name + "</br>" + attShips.health + "</br>" + "</br>"));
+            attackShips.forEach(attShips => document.getElementById("attack-ships").insertAdjacentHTML("afterbegin", `<p class = "attackShip"> ${attShips.name} </p> <p class = attShipsHP> ${attShips.health} </p>`)); 
         }
-        attackShipPrint();
+        attackShipsPrint();
 
         let shipsArray = [motherShip, defenceShip1,defenceShip2,defenceShip3,defenceShip4,defenceShip5,attackShip1,attackShip2,attackShip3,attackShip4,attackShip5,attackShip6,attackShip7,attackShip8];
-        // const randomNum = () => {
-        //     return Math.floor(Math.random() * 14)
-        // }
 
         const attackAndUpdate = () => {
             attackRandomShip();
@@ -116,7 +122,7 @@
         const updateShipsHealth = () => {
             motherShipPrint();
             defenceShipPrint();
-            attackShipPrint();
+            attackShipsPrint();
         }
     </script>
 </body>
