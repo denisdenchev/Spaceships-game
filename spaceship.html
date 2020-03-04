@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <section id="ships"></section>
+    <button id="fire">Fire</button>
+    <script>
+      const numMotherShip = 1;
+      const numDeffShips = 8;
+      const numAttShips = 5;
+      const totalShips = numMotherShip + numDeffShips + numAttShips;
+      const shipsElement = document.getElementById("ships");
+
+      class Spaceship {
+        constructor(name, health, dmgPoints) {
+          this.name = name;
+          this.health = health;
+          this.dmgPoints = dmgPoints;
+        }
+
+        takeHit() {
+          this.health - this.dmgPoints;
+        }
+
+        die() {
+          this.health <= 0;
+        }
+      }
+
+      const ships = [];
+
+      for (index = 0; index < totalShips; index++) {
+        let newShip;
+        if (index < numMotherShip) {
+          newShip = new Spaceship("MotherShip", 100, 10);
+        } else if (index <= numDeffShips) {
+          newShip = new Spaceship("DefenceShip", 80, 10);
+        } else {
+          newShip = new Spaceship("AttackShip", 45, 12);
+        }
+        ships.push(newShip);
+      }
+
+      const updateHealth = () => {
+        shipsElement.innerHTML = "";
+        ships.forEach(ship => {
+          shipsElement.innerHTML += `<p class = ${ship.name}>${ship.name}</p>  <p>${ship.health}</p>`;
+        });
+      };
+
+      const endGame = () => {
+        ships.forEach(ship => ship.die());
+      };
+
+      const dealDmg = () => {
+        const randomIndex = Math.floor(Math.random() * ships.length);
+        const randomShip = ships[randomIndex];
+        randomShip.takeHit();
+        // randomShip.hp <= 0 && randomShip.name === "MotherShip" ? endGame() :
+        // randomShip.hp <= 0 ? ships.splice(randomIndex, 1);
+        if (randomShip.hp <= 0 && randomShip.name === "Mothership") {
+          endGame();
+        } else if (randomShip.hp <= 0) {
+          ships.splice(randomIndex, 1);
+        }
+        updateHealth();
+      };
+      document.querySelector("button").addEventListener("click", dealDmg());
+      updateHealth();
+    </script>
+  </body>
+</html>
