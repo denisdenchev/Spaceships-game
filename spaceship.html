@@ -10,7 +10,7 @@
     <section id="ships"></section>
     <button id="fire">Fire</button>
     <script>
-      const numMotherShip = 1;
+      const numMotherShip = 2;
       const numDeffShips = 8;
       const numAttShips = 5;
       const totalShips = numMotherShip + numDeffShips + numAttShips;
@@ -24,11 +24,12 @@
         }
 
         takeHit() {
-          this.health - this.dmgPoints;
+          this.health = this.health - this.dmgPoints;
+          if (this.health <= 0) this.kill();
         }
 
-        die() {
-          this.health <= 0;
+        kill() {
+          this.health = 0;
         }
       }
 
@@ -38,7 +39,8 @@
         let newShip;
         if (index < numMotherShip) {
           newShip = new Spaceship("MotherShip", 100, 10);
-        } else if (index <= numDeffShips) {
+        } else if (index < numDeffShips + numMotherShip) {
+          /* because index starts from 2 where 2 motherships have been created*/
           newShip = new Spaceship("DefenceShip", 80, 10);
         } else {
           newShip = new Spaceship("AttackShip", 45, 12);
@@ -46,15 +48,15 @@
         ships.push(newShip);
       }
 
-      const updateHealth = () => {
+      const updateShipHtml = () => {
         shipsElement.innerHTML = "";
         ships.forEach(ship => {
-          shipsElement.innerHTML += `<p class = ${ship.name}>${ship.name}</p>  <p>${ship.health}</p>`;
+          shipsElement.innerHTML += `<p class = ${ship.name}> ${ship.name}</p>  <p>${ship.health}</p>`;
         });
       };
 
       const endGame = () => {
-        ships.forEach(ship => ship.die());
+        ships.forEach(ship => ship.kill());
       };
 
       const dealDmg = () => {
@@ -68,10 +70,10 @@
         } else if (randomShip.hp <= 0) {
           ships.splice(randomIndex, 1);
         }
-        updateHealth();
+        updateShipHtml();
       };
-      document.querySelector("button").addEventListener("click", dealDmg());
-      updateHealth();
+      document.querySelector("button").addEventListener("click", dealDmg);
+      updateShipHtml();
     </script>
   </body>
 </html>
