@@ -127,11 +127,13 @@
         const randomIndex = Math.floor(Math.random() * ships.length);
         const randomShip = ships[randomIndex];
         randomShip.takeHit();
-        // if (randomShip.hp <= 0 && randomShip.name === "MotherShip") {
-        //   endGame();
-        // } else if (randomShip.hp <= 0) {
-        //   ships.splice(randomShip, 1);
-        // }
+
+        if (randomShip.health <= 0 && randomShip.name === "MotherShip") {
+          endGame();
+        } else if (randomShip.health <= 0) {
+          ships.splice(randomIndex, 1);
+        }
+        console.log(ships);
         updateShipHtml();
       };
       document.querySelector("button").addEventListener("click", dealDmg);
