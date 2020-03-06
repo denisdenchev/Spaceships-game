@@ -9,18 +9,82 @@
   <body>
     <section id="ships"></section>
     <button id="fire">Fire</button>
+    <style>
+      #ships {
+        display: grid;
+        grid-template-columns: 20em 20em 20em 20em 20em 20em 20em;
+        grid-template-rows: 20em 20em 20em;
+      }
+      .motherShip {
+        margin: 0 auto;
+        background-image: url(images.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 280px;
+        width: 250px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+      }
+      .motherShip p {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 25px;
+      }
+
+      .defenceShip {
+        background-image: url(smallShip.jpg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 160px;
+        height: 170px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+      }
+
+      .defenceShip p {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .attackShip {
+        background-image: url(smallShip.jpg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 150px;
+        height: 160px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+      }
+
+      .attackShip p {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 20px;
+      }
+
+      button {
+        height: 50px;
+        width: 100px;
+        font-size: 25px;
+      }
+    </style>
     <script>
-      const numMotherShip = 2;
+      const numMotherShip = 1;
       const numDeffShips = 8;
       const numAttShips = 5;
       const totalShips = numMotherShip + numDeffShips + numAttShips;
       const shipsElement = document.getElementById("ships");
 
       class Spaceship {
-        constructor(name, health, dmgPoints) {
+        constructor(name, health, dmgPoints, cssStyles) {
           this.name = name;
           this.health = health;
           this.dmgPoints = dmgPoints;
+          this.cssStyles = cssStyles;
         }
 
         takeHit() {
@@ -38,12 +102,12 @@
       for (index = 0; index < totalShips; index++) {
         let newShip;
         if (index < numMotherShip) {
-          newShip = new Spaceship("MotherShip", 100, 10);
+          newShip = new Spaceship("MotherShip", 100, 10, "motherShip");
         } else if (index < numDeffShips + numMotherShip) {
           /* because index starts from 2 where 2 motherships have been created*/
-          newShip = new Spaceship("DefenceShip", 80, 10);
+          newShip = new Spaceship("DefenceShip", 80, 10, "defenceShip");
         } else {
-          newShip = new Spaceship("AttackShip", 45, 12);
+          newShip = new Spaceship("AttackShip", 45, 12, "attackShip");
         }
         ships.push(newShip);
       }
@@ -51,7 +115,7 @@
       const updateShipHtml = () => {
         shipsElement.innerHTML = "";
         ships.forEach(ship => {
-          shipsElement.innerHTML += `<p class = ${ship.name}> ${ship.name}</p>  <p>${ship.health}</p>`;
+          shipsElement.innerHTML += `<div class = ${ship.cssStyles}> <p> ${ship.name}</p> <p> ${ship.health}</p> </div>`;
         });
       };
 
@@ -63,13 +127,11 @@
         const randomIndex = Math.floor(Math.random() * ships.length);
         const randomShip = ships[randomIndex];
         randomShip.takeHit();
-        // randomShip.hp <= 0 && randomShip.name === "MotherShip" ? endGame() :
-        // randomShip.hp <= 0 ? ships.splice(randomIndex, 1);
-        if (randomShip.hp <= 0 && randomShip.name === "Mothership") {
-          endGame();
-        } else if (randomShip.hp <= 0) {
-          ships.splice(randomIndex, 1);
-        }
+        // if (randomShip.hp <= 0 && randomShip.name === "MotherShip") {
+        //   endGame();
+        // } else if (randomShip.hp <= 0) {
+        //   ships.splice(randomShip, 1);
+        // }
         updateShipHtml();
       };
       document.querySelector("button").addEventListener("click", dealDmg);
