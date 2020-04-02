@@ -7,175 +7,156 @@
     <title>Document</title>
   </head>
   <body>
-    <p id="mothership"></p>
-    <section id="defence-ships"></section>
-    <section id="attack-ships"></section>
-    <button id="attack" type="button" onclick="attackAndUpdate()">
-      Attack!
-    </button>
+    <section id="ships"></section>
+    <button id="fire">Fire</button>
+    <button id="refresh">Start Again</button>
     <style>
-      #defence-ships {
-        border: black 2px solid;
+      #ships {
+        display: grid;
+        grid-template-columns: 20em 20em 20em 20em 20em 20em 20em;
+        grid-template-rows: 20em 20em 20em;
+      }
+      .motherShip {
+        margin: 0 auto;
+        background-image: url(images.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 280px;
+        width: 250px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+      }
+      .motherShip p {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 25px;
+      }
+
+      .defenceShip {
+        background-image: url(smallShip.jpg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 160px;
+        height: 170px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+      }
+
+      .defenceShip p {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .attackShip {
+        background-image: url(smallShip.jpg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 150px;
+        height: 160px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+      }
+
+      .attackShip p {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 20px;
+      }
+
+      #fire {
+        height: 50px;
+        width: 100px;
+        font-size: 25px;
+        margin: 0 auto;
+      }
+
+      #refresh {
+        height: 50px;
+        width: 150px;
+        font-size: 25px;
       }
     </style>
     <script>
-      class Spaceship{
+      const numMotherShip = 1;
+      const numDeffShips = 8;
+      const numAttShips = 5;
+      const totalShips = numMotherShip + numDeffShips + numAttShips;
+      const shipsElement = document.getElementById("ships");
 
-          constructor(name, health,dmgPoints) {
-              this.name = name;
-              this.health = health;
-              this.dmgPoints = dmgPoints
-          }
-          takeHit() {
-              this.health - dmgPoints;
-          }
-          die() {
-              this.health <= 0;
-          }
+      class Spaceship {
+        constructor(name, health, dmgPoints, cssStyles) {
+          this.name = name;
+          this.health = health;
+          this.dmgPoints = dmgPoints;
+          this.cssStyles = cssStyles;
+        }
+
+        takeHit() {
+          this.health = this.health - this.dmgPoints;
+          if (this.health <= 0) this.kill();
+        }
+
+        kill() {
+          this.health = 0;
+        }
       }
 
-      const numMotherShip = 1;
-      const numDefenceShips = 8;
-      const numAtttackShips = 5;
-
-
-      const totalShips = [motherShip + defenceShips + attackShips];
       const ships = [];
 
-      for (index = 0; index < totalShips; index++){
+      const buildShips = () => {
+        for (index = 0; index < totalShips; index++) {
           let newShip;
-          if (index < numMotherShip){
-              newShip = new Spaceship ("Mothership", 100, 10)
-          } else if (index < defenceShips) {
-              newShip = new Spaceship ("DefenceShip", 80, 10)
-          } else (index < attackShips) {
-              newShip = new Spaceship ("Attackship", 45, 10)
+          if (index < numMotherShip) {
+            newShip = new Spaceship("MotherShip", 100, 10, "motherShip");
+          } else if (index < numDeffShips + numMotherShip) {
+            /* because index starts from 2 where 2 motherships have been created*/
+            newShip = new Spaceship("DefenceShip", 80, 10, "defenceShip");
+          } else {
+            newShip = new Spaceship("AttackShip", 45, 12, "attackShip");
           }
-          ships.push(newShips);
-      }
+          ships.push(newShip);
+        }
+      };
+      buildShips();
+
+      const updateShipHtml = () => {
+        shipsElement.innerHTML = "";
+        ships.forEach(ship => {
+          shipsElement.innerHTML += `<div class = ${ship.cssStyles}> <p> ${ship.name}</p> <p> ${ship.health}</p> </div>`;
+        });
+        console.log("lalala");
+      };
+
+      const endGame = () => {
+        ships.forEach(ship => ship.kill());
+        ships.splice(0, ships.length);
+      };
+
+      const dealDmg = () => {
+        const randomIndex = Math.floor(Math.random() * ships.length);
+        const randomShip = ships[randomIndex];
+        randomShip.takeHit();
+
+        if (randomShip.health <= 0 && randomShip.name === "MotherShip") {
+          alert("You have won!");
+          endGame();
+        } else if (randomShip.health <= 0) {
+          ships.splice(randomIndex, 1);
+        }
+        updateShipHtml();
+      };
+      const resetGame = () => {
+        endGame();
+        buildShips();
+        updateShipHtml();
+      };
+      document.querySelector("#fire").addEventListener("click", dealDmg);
+      updateShipHtml();
+      document.querySelector("#refresh").addEventListener("click", resetGame);
     </script>
   </body>
 </html>
-
-<!-- //         const motherShipPrint = () => {
-//             document.getElementById("mothership").innerHTML = '';
-//             document.getElementById("mothership").insertAdjacentHTML("afterbegin", motherShip.name + "</br>" + motherShip.health + "</br>" + "</br>");
-//         }
-//         motherShipPrint();
-
-//         const defenceShips = [defenceShip1,defenceShip2,defenceShip3,defenceShip4,defenceShip5];
-
-//         const defenceShipPrint = () => {
-//             document.getElementById("defence-ships").innerHTML = '';
-//             defenceShips.forEach(deffShips => document.getElementById("defence-ships").insertAdjacentHTML("afterbegin",`<p class = "deffShips"> ${deffShips.name} </p> <p class = "deffShipsHP"> ${deffShips.health} </p>`));
-//         }
-//         defenceShipPrint();
-
-//         const attackShips = [attackShip1,attackShip2,attackShip3,attackShip4,attackShip5,attackShip6,attackShip7,attackShip8];
-
-//         const attackShipsPrint = () => {
-//             document.getElementById("attack-ships").innerHTML = "";
-//             attackShips.forEach(attShips => document.getElementById("attack-ships").insertAdjacentHTML("afterbegin", `<p class = "attackShip"> ${attShips.name} </p> <p class = attShipsHP> ${attShips.health} </p>`)); 
-//         }
-//         attackShipsPrint();
-
-//         let shipsArray = [motherShip, defenceShip1,defenceShip2,defenceShip3,defenceShip4,defenceShip5,attackShip1,attackShip2,attackShip3,attackShip4,attackShip5,attackShip6,attackShip7,attackShip8];
-
-//         const attackAndUpdate = () => {
-//             attackRandomShip();
-//             updateShipsHealth();
-//         };
-
-//         const endGame = () => {
-//             shipsArray.forEach(ship =>ship.die())
-//         }
-
-//         const attackRandomShip = () => {
-//             const randomNum = Math.floor(Math.random() * shipsArray.length);
-//             const randomShip = shipsArray[randomNum];
-//             randomShip.loseHealthWhenHit;
-//             if (randomShip.name === motherShip && randomShip.health <= 0){
-//                 endGame()
-//             } else  if (randomShip.health <= 0) {
-//                 shipsArray.splice(randomNum, 1)}
-//             else if (shipsArray.length == 0) { 
-//                 alert("Your game has finished, you have won!")}
-//         } 
-//         //    if (shipsArray[randomNum].health <= 0) {
-//         //         shipsArray.splice([randomNum], 1);
-//         //    }
-//         //     };
-
-//         const updateShipsHealth = () => {
-//             motherShipPrint();
-//             defenceShipPrint();
-//             attackShipsPrint();
-//         } -->
-
-<!-- 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <script src="main.js" async defer></script>
-  </head>
-  <body>
-    <section id="ships"></section>
-    <button id="fire">Fire</button>
-  </body>
-</html>
-const numMotherShips = 1;
-const numAttackShips = 5;
-const numDefenseShips = 8;
-const totalShips = numAttackShips + numDefenseShips + numMotherShips;
-const ships = [];
-const shipsElement = document.getElementById('ships');
-class Ship {
-    constructor(name, hp, damgePoints) {
-        this.name = name;
-        this.hp = hp;
-        this.damgePoints = damgePoints;
-    }
-    takeHit() {
-        this.hp = this.hp - this.damgePoints;
-    }
-    die() {
-        this.hp = 0;
-    }
-}
-for (let index = 0; index < totalShips; index++) {
-    let newShip;
-    if (index < numMotherShips) {
-        newShip = new Ship("MotherShip", 10, 25);
-    } else if (index <= numAttackShips) {
-        newShip = new Ship("AttackShip", 60, 15);
-    } else if (index <= totalShips) {
-        newShip = new Ship("DefenseShip", 40, 10);
-    }
-    ships.push(newShip);
-}
-const updateHtml = () => {
-    shipsElement.innerHTML = "";
-    ships.forEach(ship => {
-        shipsElement.innerHTML += `<p>${ship.name}: ${ship.hp}</p>`;
-    })
-}
-const endGame = () => {
-    ships.forEach(ship => ship.die())
-}
-const dealDamage = () => {
-    const randomIndex = Math.floor(Math.random() * ships.length);
-    const randomShip = ships[randomIndex];
-    randomShip.takeHit();
-    if (randomShip.hp <= 0 && randomShip.name === "MotherShip") {
-        endGame();
-    } else if (randomShip.hp <= 0) {
-        ships.splice(randomIndex, 1);
-    }
-    updateHtml()
-}
-document.querySelector('button').addEventListener("click", dealDamage);
-updateHtml(); -->
