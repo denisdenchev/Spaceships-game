@@ -18,7 +18,7 @@
       }
       .motherShip {
         margin: 0 auto;
-        background-image: url(images.png);
+        background-image: url(mothership.png);
         background-repeat: no-repeat;
         background-position: center;
         height: 280px;
@@ -34,7 +34,7 @@
       }
 
       .defenceShip {
-        background-image: url(smallShip.jpg);
+        background-image: url(smallship.jpg);
         background-size: contain;
         background-repeat: no-repeat;
         width: 160px;
@@ -51,7 +51,7 @@
       }
 
       .attackShip {
-        background-image: url(smallShip.jpg);
+        background-image: url(smallship.jpg);
         background-size: contain;
         background-repeat: no-repeat;
         width: 150px;
@@ -110,14 +110,12 @@
       const buildShips = () => {
         for (index = 0; index < totalShips; index++) {
           let newShip;
-          if (index < numMotherShip) {
-            newShip = new Spaceship("MotherShip", 100, 10, "motherShip");
-          } else if (index < numDeffShips + numMotherShip) {
-            /* because index starts from 2 where 2 motherships have been created*/
-            newShip = new Spaceship("DefenceShip", 80, 10, "defenceShip");
-          } else {
-            newShip = new Spaceship("AttackShip", 45, 12, "attackShip");
-          }
+          index < numMotherShip
+            ? (newShip = new Spaceship("MotherShip", 100, 10, "motherShip"))
+            : index < numDeffShips + numMotherShip
+            ? (newShip = new Spaceship("DefenceShip", 80, 10, "defenceShip"))
+            : (newShip = new Spaceship("AttackShip", 45, 12, "attackShip"));
+
           ships.push(newShip);
         }
       };
@@ -128,7 +126,6 @@
         ships.forEach(ship => {
           shipsElement.innerHTML += `<div class = ${ship.cssStyles}> <p> ${ship.name}</p> <p> ${ship.health}</p> </div>`;
         });
-        console.log("lalala");
       };
 
       const endGame = () => {
