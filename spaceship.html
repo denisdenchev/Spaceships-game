@@ -9,6 +9,7 @@
   <body>
     <section id="ships"></section>
     <button id="fire">Fire</button>
+    <button id="refresh" onclick="updateShipHtml()">Start Again</button>
     <style>
       #ships {
         display: grid;
@@ -66,9 +67,16 @@
         font-size: 20px;
       }
 
-      button {
+      #fire {
         height: 50px;
         width: 100px;
+        font-size: 25px;
+        margin: 0 auto;
+      }
+
+      #refresh {
+        height: 50px;
+        width: 150px;
         font-size: 25px;
       }
     </style>
@@ -117,10 +125,12 @@
         ships.forEach(ship => {
           shipsElement.innerHTML += `<div class = ${ship.cssStyles}> <p> ${ship.name}</p> <p> ${ship.health}</p> </div>`;
         });
+        console.log("lalala");
       };
 
       const endGame = () => {
         ships.forEach(ship => ship.kill());
+        ships.splice(0, ships.length);
       };
 
       const dealDmg = () => {
@@ -129,11 +139,11 @@
         randomShip.takeHit();
 
         if (randomShip.health <= 0 && randomShip.name === "MotherShip") {
+          alert("You have won!");
           endGame();
         } else if (randomShip.health <= 0) {
           ships.splice(randomIndex, 1);
         }
-        console.log(ships);
         updateShipHtml();
       };
       document.querySelector("button").addEventListener("click", dealDmg);
