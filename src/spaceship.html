@@ -9,7 +9,7 @@
   <body>
     <section id="ships"></section>
     <button id="fire">Fire</button>
-    <button id="refresh" onclick="updateShipHtml()">Start Again</button>
+    <button id="refresh">Start Again</button>
     <style>
       #ships {
         display: grid;
@@ -107,18 +107,21 @@
 
       const ships = [];
 
-      for (index = 0; index < totalShips; index++) {
-        let newShip;
-        if (index < numMotherShip) {
-          newShip = new Spaceship("MotherShip", 100, 10, "motherShip");
-        } else if (index < numDeffShips + numMotherShip) {
-          /* because index starts from 2 where 2 motherships have been created*/
-          newShip = new Spaceship("DefenceShip", 80, 10, "defenceShip");
-        } else {
-          newShip = new Spaceship("AttackShip", 45, 12, "attackShip");
+      const buildShips = () => {
+        for (index = 0; index < totalShips; index++) {
+          let newShip;
+          if (index < numMotherShip) {
+            newShip = new Spaceship("MotherShip", 100, 10, "motherShip");
+          } else if (index < numDeffShips + numMotherShip) {
+            /* because index starts from 2 where 2 motherships have been created*/
+            newShip = new Spaceship("DefenceShip", 80, 10, "defenceShip");
+          } else {
+            newShip = new Spaceship("AttackShip", 45, 12, "attackShip");
+          }
+          ships.push(newShip);
         }
-        ships.push(newShip);
-      }
+      };
+      buildShips();
 
       const updateShipHtml = () => {
         shipsElement.innerHTML = "";
@@ -146,8 +149,14 @@
         }
         updateShipHtml();
       };
-      document.querySelector("button").addEventListener("click", dealDmg);
+      const resetGame = () => {
+        endGame();
+        buildShips();
+        updateShipHtml();
+      };
+      document.querySelector("#fire").addEventListener("click", dealDmg);
       updateShipHtml();
+      document.querySelector("#refresh").addEventListener("click", resetGame);
     </script>
   </body>
 </html>
